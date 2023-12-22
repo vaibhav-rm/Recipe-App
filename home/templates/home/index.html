@@ -8,6 +8,7 @@ Homepage
 		{% csrf_token %}
 		<h2>Add Recipe</h2>
 		<hr>
+		<h4 class="text-center"> Welcome! {{ request.user }}</h4>
   <div class="form-group">
     <label for="receipename">Recipe name</label>
     <input name="recipe_name" required type="text" class="form-control" aria-describedby="namehelp" placeholder="Enter Recipe Name">
