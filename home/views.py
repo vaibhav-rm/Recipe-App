@@ -1,13 +1,36 @@
+import requests
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
 # Create your views here.
 
 @login_required(login_url="/login/")
 def index(request):
+    # Fetch food images from Unsplash API
+    unsplash_access_key = settings.UNSPLASH
+    print(unsplash_access_key)
+    unsplash_url = f'https://api.unsplash.com/photos/random/?query=food&count=5&client_id={unsplash_access_key}'
+    response = requests.get(unsplash_url)
+    
+    if response.status_code == 200:
+        # Extract image URLs from the API response
+        food_images = [photo['urls']['regular'] for photo in response.json()]
+    else:
+        # If API request fails, use some default images or handle the error as needed
+        try :food_images = [
+            '/media/default_food1.jpg',
+            '/media/default_food2.jpg',
+            '/media/default_food3.jpg',
+            '/media/default_food4.jpg',
+            '/media/default_food5.jpg',
+           ]
+        except error as e:
+            print(e)
+
     if request.method == "POST":
          
         data = request.POST
@@ -26,7 +49,7 @@ def index(request):
     if request.GET.get('search'):
         queryset = queryset.filter(recipe_name__icontains = request.GET.get('search'))
 
-    context = {'recipes': queryset}
+    context = {'recipes': queryset, 'background_images': food_images,}
     return render(request, 'home/index.html', context)
 
 @login_required(login_url="/login/")
