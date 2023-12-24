@@ -31,13 +31,14 @@
 	<body class="bg-dark">
 		<nav class="navbar shadow-lg primary-orange">
   <div class="container-fluid">
+	  {% if request.user_agent.is_mobile %}
         <a class="navbar-brand text-white h1" href="#">
             <!-- Your Logo/Image Goes Here -->
 	    <img src="/media/receipe/logo.png" alt="Logo" height="66" width="66">
             Recipe db
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon">< /span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav" style="z-index: 1;">
             <ul class="navbar-nav me-auto">
@@ -52,6 +53,31 @@
                 {% else %}
                     <a href="/login/" class="btn btn-success mt-2" type="login">Login</a>
                 {% endif %}
+		{% else %}
+<a class="navbar-brand" href="#">
+            <!-- Your Logo/Image Goes Here -->
+            <img src="/media/receipe/logo.png" alt="Logo" height="30" width="30">
+            Recipe db
+        </a>
+
+        <!-- Remove the button and the collapsible div -->
+        <!-- Remove the inline styles as well -->
+
+        <!-- Directly include the navigation links and form -->
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/index/">Home</a>
+            </li>
+        </ul>
+
+        <form class="d-flex">
+            {% if request.user.is_authenticated %}
+                <input class="form-control me-2 mt-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                <a href="/logout/" class="btn btn-success mt-2" type="logout">Logout</a>
+            {% else %}
+                <a href="/login/" class="btn btn-success mt-2" type="login">Login</a>
+            {% endif %}
+	    {% endif %}
             </form>
         </div>
     </div>
