@@ -6,29 +6,37 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
+from django.core.cache import cache
 # Create your views here.
 
 @login_required(login_url="/login/")
 def index(request):
-    # Fetch food images from Unsplash API
-    unsplash_access_key = settings.UNSPLASH
-    print(unsplash_access_key)
-    unsplash_url = f'https://api.unsplash.com/photos/random/?query=food&count=5&client_id={unsplash_access_key}'
-    response = requests.get(unsplash_url)
-    
-    if response.status_code == 200:
-        # Extract image URLs from the API response
-        food_images = [photo['urls']['regular'] for photo in response.json()]
-    else:
-        # If API request fails, use some default images or handle the error as needed
-        try :food_images = [
-            '/media/default_food1.jpg',
-            '/media/default_food2.jpg',
-            '/media/default_food3.jpg',
-            '/media/default_food4.jpg',
-            '/media/default_food5.jpg',
-           ]
-        except error as e:
+    # Check if images are in the cache
+    food_images = cache.get('food_images')
+
+    # If not in the cache, fetch images from Unsplash API
+    if not food_images:
+        unsplash_access_key = settings.UNSPLASH
+        unsplash_url = f'https://api.unsplash.com/photos/random/?query=food&count=5&client_id={unsplash_access_key}'
+        
+        try:
+            response = requests.get(unsplash_url)
+
+            if response.status_code == 200:
+                food_images = [photo['urls']['regular'] for photo in response.json()]
+
+                # Cache the images for 10 minutes (adjust as needed)
+                cache.set('food_images', food_images, 600)
+            else:
+                # If API request fails, use default images
+                food_images = [
+                    '/media/default_food1.jpg',
+                    '/media/default_food2.jpg',
+                    '/media/default_food3.jpg',
+                    '/media/default_food4.jpg',
+                    '/media/default_food5.jpg',
+                ]
+        except Exception as e:
             print(e)
 
     if request.method == "POST":
