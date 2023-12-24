@@ -57,6 +57,7 @@ def index(request):
     if request.GET.get('search'):
         queryset = queryset.filter(recipe_name__icontains = request.GET.get('search'))
 
+    print(request.user_agent.is_mobile)
     context = {'recipes': queryset, 'background_images': food_images,}
     return render(request, 'home/index.html', context)
 
@@ -140,3 +141,4 @@ def register_page(request):
         messages.success(request, "Account Created Scucessfully")
 
     return render(request, "home/register.html")
+
