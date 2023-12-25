@@ -57,7 +57,6 @@ def index(request):
     if request.GET.get('search'):
         queryset = queryset.filter(recipe_name__icontains = request.GET.get('search'))
 
-    print(request.user_agent.is_mobile)
     context = {'recipes': queryset, 'background_images': food_images,}
     return render(request, 'home/index.html', context)
 
@@ -97,16 +96,19 @@ def login_page(request):
         username = data.get('username')
         password = data.get('password')
 
-        if not User.objects.filter(username = username).exists():
+        # Check if the user with the given username exists
+        if not User.objects.filter(username=username).exists():
             messages.error(request, 'Invalid Username')
             return redirect('/login/')
-        
-        user = authenticate(request, username = username, password = password)
 
+        # Authenticate the user with the provided username and password
+        user = authenticate(request, username=username, password=password)
         if user is not None:
+            # Login the user if authentication is successful
             login(request, user)
             return redirect('/')
         else:
+            # Invalid credentials
             messages.warning(request, "Invalid Credentials")
             return redirect('/login/')
 
@@ -133,12 +135,16 @@ def register_page(request):
         user = User.objects.create_user(
                 first_name = first_name,
                 last_name = last_name,
-                username = username
+                username = username,
+                password = password
                 )
-        
-        user.set_password(password)
+
         user.save()
         messages.success(request, "Account Created Scucessfully")
 
     return render(request, "home/register.html")
 
+def recipes_page(request):
+    queryset = Recipe.objects.all()
+    context = {'recipes': queryset}
+    return render(request, "home/recipes.html", context)

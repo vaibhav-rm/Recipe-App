@@ -1,19 +1,44 @@
-{% extends 'home/base.html'%}
+{% extends 'home/base.html' %}
 {% block title %}
-New recipes
+    New recipes
 {% endblock %}
 {% block body %}
-<div class="card-deck">
-{% for recipe in recipes %}
-  <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-	    <h5 class="card-title">{{ recipe.recipe_name }}</h5>
-	    <p class="card-text">{{ recipe.recipe_description }}</p>
+    <h1 class="text-white">Recipe Cards</h1>
+    {% if not request.user_agent.is_mobile %}
+    <div class="row">
+        {% for recipe in recipes %}
+             <div class="col-md-3 mb-3 {% if forloop.first or forloop.counter0|divisibleby:3 %} offset-md-1{% endif %}">
+                <div class="card">
+                    <img src="{{ recipe.recipe_image.url }}" class="card-img-top" style="max-height: 200px;" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">{{ recipe.recipe_name }}</h5>
+                        <p class="card-text">{{ recipe.recipe_description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted text-white">Last updated {{ recipe.updated_at }} ago.</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    <div class="card-footer">
-	    <small class="text-muted">Last updated {{recipe.last}} ago.</small>
+    {% elif request.user_agent.is_mobile %}
+    <h1 class="text-white">Recipe Cards</h1>
+    <div class="recipe-container">
+        {% for recipe in recipes %}
+            <div class="recipe-card">
+                <div class="card">
+                    <img src="{{ recipe.recipe_image.url }}" class="card-img-top" style="max-height: 200px;" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">{{ recipe.recipe_name }}</h5>
+                        <p class="card-text">{{ recipe.recipe_description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted text-white">Last updated {{ recipe.updated_at }} ago.</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-   {% endfor %}
-  </div>
+    {% endif %}
 {% endblock %}
+
