@@ -10,6 +10,9 @@
             <div class="card p-4 shadow-lg" style="background-color: #f8f9fa;">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+		    {% if messages %}
+		    {% for message in messages %}                                                               <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>                                               {% endfor %}
+		    {% endif %}
                     <h2 class="mb-4" style="color: #e44d26;">Add Recipe</h2>
                     <h4 class="text-muted text-center mb-4">Welcome, {{ request.user }}</h4>
 
