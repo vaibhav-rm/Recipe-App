@@ -29,32 +29,58 @@
 	background-color: #e44d26;
     }
     
-     .recipe-container {
-            display: flex;
-            overflow-x: scroll;
-            scroll-snap-type: x mandatory;
-        }
+	.recipe-container {
+        display: flex;
+        gap: 20px;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+        -ms-overflow-style: none;  /* Internet Explorer 11 */
+        scrollbar-width: none;  /* Firefox */
+    }
 
-        .recipe-card {
-            flex: 0 0 100vw;
-            max-width: 100vw;
-            box-sizing: border-box;
-            scroll-snap-align: start;
-        }
+    .recipe-card {
+        flex: 0 0 auto;
+        width: 350px; /* Adjust the width as needed */
+        scroll-snap-align: start;
+        height: 78vh; /* Full height of the viewport */
+    }
 
-        @media screen and (max-width: 600px) {
-            /* Adjust styles for smaller screens (e.g., mobile) */
-            .recipe-container {
-                overflow-x: scroll;
-                scroll-snap-type: none;
-                white-space: normal;
-            }
+    .card {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #f8f9fa; /* Light gray background */
+        border-radius: 10px;
+        overflow: hidden; /* Hide overflow content */
+    }
 
-            .recipe-card {
-                margin-right: 0;
-            }
-        }
+    .card-body {
+        flex-grow: 1;
+        padding: 20px;
+    }
 
+	.card {
+
+    animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+
+    0% {
+
+        opacity: 0;
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+     }
+}
 
 </style>
 	<body class="bg-dark">

@@ -53,7 +53,7 @@ def index(request):
                     recipe_description = recipe_description
                     )
         else:
-            messages.warning(request, "No image file uploaded")
+            messages.warning(request, "No image file uploaded",extra_tags="alert alert-danger")
 
         return redirect('/')
     queryset = Recipe.objects.all()

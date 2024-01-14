@@ -26,9 +26,9 @@
         {% for recipe in recipes %}
             <div class="recipe-card">
                 <div class="card">
-                    <img src="{{ recipe.recipe_image.url }}" class="card-img-top" style="max-height: 200px;" alt="...">
+                    <img src="{{ recipe.recipe_image.url }}" class="card-img-top" style="max-height: 198px;" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title text-white">{{ recipe.recipe_name }}</h5>
+                        <h5 class="card-title ">{{ recipe.recipe_name }}</h5>
                         <p class="card-text">{{ recipe.recipe_description }}</p>
                     </div>
                     <div class="card-footer">
